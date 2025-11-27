@@ -1,0 +1,10 @@
+.card {
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
+  margin: 8px;
+}
+
+.verde { background-color: #4CAF50; }
+.amarillo { background-color: #FFC107; }
+.azul { background-color: #2196F3; }

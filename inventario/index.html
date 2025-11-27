@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agroecoalmacen</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Fondo general -->
+  <div class="fondo">
+    <!-- Ventana principal -->
+    <div class="ventana">
+      <div class="container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <h2>Agroecoalmacen</h2>
+          <nav>
+            <a href="#" class="active">🏠 Dashboard</a>
+            <a href="#">📦 Inventario</a>
+            <a href="#">🛒 Tienda</a>
+            <a href="#">⚙️ Ajustes</a>
+          </nav>
+          <button class="btn-logout" onclick="cerrarSesion()">⏻ Cerrar sesión</button>
+
+<script>
+  function cerrarSesion() {
+    if (confirm("¿Seguro que deseas cerrar sesión?")) {
+      window.location.href = 'login.html';
+    }
+  }
+</script>
+
+          
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main">
+          <!-- Barra superior -->
+          <header class="topbar">
+            <div class="topbar-left">
+                          </div>
+
+            <div class="titulo">
+              <h1>Panel Principal</h1>
+              <p>Plant's Antony</p>
+            </div>
+
+            <div class="topbar-right"></div>
+          </header>
+
+          <hr class="divider">
+          <p class="status">🟢 Conexión establecida - Sensores activos</p>
+
+          <!-- PANEL SUPERIOR -->
+          <section class="panel-superior">
+            <!-- CÁMARA -->
+            <div class="camara">
+              <h2>📷 Cámara de Monitoreo</h2>
+              <img src="assets/camara.png" alt="Cámara">
+            </div>
+
+            <!-- INVENTARIO -->
+            <div class="inventario">
+              <h2>Inventario de Plantas</h2>
+              <div class="plantas">
+                <div class="planta">
+                  <img src="assets/pitahaya.png" alt="Pitahaya">
+                  <h4>Pitahaya</h4>
+                  <p>Humedad: 78%</p>
+                  <div class="barra"><div style="width:78%"></div></div>
+                  <span class="estado alerta">⚠ Atención</span>
+                </div>
+                <div class="planta">
+                  <img src="assets/pimenton.png" alt="Pimentón">
+                  <h4>Pimentón</h4>
+                  <p>Temp: 25°C</p>
+                  <div class="barra"><div style="width:85%"></div></div>
+                  <span class="estado ok">✔ Saludable</span>
+                </div>
+                <div class="planta">
+                  <img src="assets/echeveria.png" alt="Echeveria">
+                  <h4>Echeveria</h4>
+                  <p>Temp: 22°C</p>
+                  <div class="barra"><div style="width:68%"></div></div>
+                  <span class="estado ok">✔ Saludable</span>
+                </div>
+              </div>
+            </div>
+          </section>
+           <!-- Precaución -->
+            <div class="control aviso">
+              <h2>⚠ ¡Precaución!</h2>
+              <div class="alertas">
+                <div class="alert verde">Pitahaya - Exceso de riego</div>
+                <div class="alert amarilla">Pimentón - Riesgo leve</div>
+              </div>
+            </div>
+          </section>
+          <section class="cards lista">
+  <div class="card verde">
+    <h3>🌿 Plantas activas</h3>
+    <p>12 registradas</p>
+  </div>
+  <div class="card amarillo">
+    <h3>⚠️ Alertas</h3>
+    <p>2 necesitan revisión</p>
+  </div>
+  <div class="card azul">
+    <h3>🌡️ Temperatura media</h3>
+    <p>24°C</p>
+  </div>
+</section>
+        </main>
+ <!-- Control Parental -->
+            <div class="control">
+              <h2>🧭 Control Parental</h2>
+              <div class="alertas">
+                <div class="alert verde">Pitahaya - Exceso de riego</div>
+                <div class="alert amarilla">Pimentón - Deficiencia de Nitrógeno</div>
+                <div class="alert roja">Echeveria - Correcta</div>
+		<h6>RAFAEL ANTONIO PALMAR HERNANDEZ</h6>
+              </div>
+            </div>
+          </section>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

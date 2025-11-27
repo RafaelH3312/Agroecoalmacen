@@ -1,0 +1,41 @@
+EVIDENCIA GA6-220501096-AA3-EV03
+RAFAEL ANTONIO PALMAR HERNANDEZ
+Proyecto: AgroecoAlmacen
+
+INSTRUCCIONES:
+1. Abra el archivo "login.html" para iniciar la interfaz.
+2. Ingrese cualquier usuario o contraseña y presione "Iniciar sesión".
+3. Automáticamente lo llevará al panel principal (index.html).
+4. Navegue por el menú lateral y revise las secciones (simuladas).
+
+Estructura de carpetas:
+- login.html → Pantalla de inicio de sesión
+- index.html → Dashboard principal
+- /css → Estilos generales
+- /assets → Imágenes y logotipos
+
+
+TREE
+
+C:.
+├───ADSO-2977517
+│   └───agroecoalmacen-end
+│       ├───agroecoalmacenbackend
+│       └───agroecoalmacenfrontend
+│        
+│         
+│           
+├───assets
+├───css
+└───inventario
+    
+
+
+
+
+
+
+
+
+
+

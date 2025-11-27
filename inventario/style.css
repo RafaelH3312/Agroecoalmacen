@@ -1,0 +1,242 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Fondo general */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #1a0f2b;
+  color: #ffffff;
+}
+
+
+/* Ventana principal */
+.ventana {
+  display: flex;
+  min-height: 100vh;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Sidebar izquierdo */
+.sidebar {
+  width: 220px;
+  background: #2b203d;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 0 20px 20px 0;
+}
+
+.sidebar h2 {
+  color: #a374d2; /* morado claro */
+  margin-bottom: 30px;
+}
+
+.sidebar nav a {
+  display: block;
+  color: #b8a8c8;
+  text-decoration: none;
+  margin-bottom: 15px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.sidebar nav a.active,
+.sidebar nav a:hover {
+  background: #a374d2;
+  color: #1a0f2b;
+}
+
+.btn-logout {
+  background: #ff5c5c;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-logout:hover {
+  background: #ff3b3b;
+}
+
+
+/
+
+/* Sidebar izquierdo */
+.sidebar {
+  width: 220px;
+  background-color: #2a1b3f;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Panel derecho (Control Parental) */
+.control-parental {
+  width: 220px;
+  background-color: #2a1b3f;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+
+
+/* Tarjetas de plantas */
+.tarjeta {
+  background-color: #3b2a5f;
+  border-radius: 15px;
+  padding: 5px;
+  text-align: center;
+}
+
+.tarjeta img {
+  width: 50%;
+  border-radius: 10px;
+}
+
+.estado.activa {
+  color: #38a169;
+  font-weight: bold;
+}
+
+.estado.alerta {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+
+.estado.roja {
+  background-color: #ef4444;
+  color: #fff;
+}
+
+/* Panel derecho: control parental */
+.control-parental {
+  width: 250px;
+  background: #2b203d;
+  padding: 20px;
+  border-radius: 20px 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.control-parental h2 {
+  color: #d6aaff;
+  margin-bottom: 10px;
+}
+
+.alertas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.alert {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.alert.verde {
+  background: #8b5cf6; /* morado saludable */
+}
+
+.alert.amarilla {
+  background: #fbbf24;
+  color: #1a0f2b;
+}
+
+.alert.roja {
+  background: #ef4444;
+}
+
+.control-parental h6 {
+  margin-top: 20px;
+  font-size: 10px;
+  color: #aaa;
+  text-align: center;
+}
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 100vh; /* altura máxima igual a la ventana */
+}
+
+.inventario {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  background-color: #24153a;
+  padding: 20px;
+  border-radius: 15px;
+  overflow-y: auto; /* Scroll vertical solo en inventario */
+  flex: 1; /* ocupa el espacio disponible */
+}
+.tarjeta .info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #5a3f8a; /* marco alrededor de la info */
+  border-radius: 5px;
+  background-color: #2d1d4f; /* un poco más oscuro para resaltar */
+}
+
+.tarjeta .info h2,
+.tarjeta .info p {
+  padding: 2px 5px;
+  border-bottom: 1px solid #5a3f8a; /* línea entre cada fila de datos */
+  margin: 0;
+}
+
+.tarjeta .info h2 {
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #8a5aff; /* encabezado más marcado */
+}
+
+.tarjeta .info p:last-child {
+  border-bottom: none; /* quitar línea al último dato */
+}
+.tarjeta .info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #8a5aff; /* borde visible */
+  border-radius: 5px;
+  background-color: #3c2a5c; /* contraste con el fondo de la tarjeta */
+}
+
+.tarjeta .info h2,
+.tarjeta .info p {
+  padding: 4px 6px;
+  border-bottom: 1px solid #8a5aff; /* línea tipo factura */
+  margin: 0;
+}
+
+.tarjeta .info h2 {
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #8a5aff; /* encabezado más marcado */
+}
+
+.tarjeta .info p:last-child {
+  border-bottom: none; /* quitar línea al último dato */
+}

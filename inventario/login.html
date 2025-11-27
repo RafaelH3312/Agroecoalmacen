@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Agroecoalmacen</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="login-fondo">
+    <div class="login-box">
+      <img src="assets/logo.png" alt="Logo Agroecoalmacen" class="login-logo">
+      <h1>Agroecoalmacen</h1>
+      <p class="slogan">Monitoreo inteligente de tus plantas</p>
+
+      <form action="index.html" method="get" class="login-form">
+  <div class="campo">
+    <label for="usuario">Usuario</label>
+    <input type="text" id="usuario" placeholder="Ingresa tu usuario" required>
+  </div>
+
+  <div class="campo">
+    <label for="clave">Contraseña</label>
+    <input type="password" id="clave" placeholder="••••••••" required>
+  </div>
+
+  <button type="submit" class="btn-login">Iniciar sesión</button>
+
+  <!-- Separador -->
+  <div class="separador">
+    <span>o continuar con</span>
+  </div>
+
+  <!-- Botón social (Google) -->
+  <div class="socials">
+  <button type="button" class="btn-google" onclick="window.location='index.html'">
+    <img src="assets/google.png" alt="Google" class="icon-google">
+  </button>
+</div>
+<p class="registro">
+  ¿No tienes cuenta? <a href="register.html">Crear cuenta</a>
+</p>
+</form>
+
+      <footer>
+        <p>© 2025 Agroecoalmacen. Todos los derechos reservados.</p>
+      </footer>
+    </div>
+  </div>
+
+</body>
+</html>
