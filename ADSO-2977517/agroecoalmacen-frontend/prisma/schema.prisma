@@ -1,0 +1,64 @@
+datasource db {
+  provider = "mysql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model cuentas {
+  id             Int       @id @default(autoincrement())
+  nombre_usuario String    @unique
+  contrasena     String
+  correo         String?
+  rol            Rol       @default(invitado)
+  estado         Estado    @default(activo)
+  acciones       registro_acciones[]
+}
+
+model organismos {
+  id                Int      @id @default(autoincrement())
+  nombre_comun      String
+  nombre_cientifico String?
+  tipo              String?
+  fecha_ingreso     DateTime
+  ubicacion         String?
+  estado            EstadoOrganismo @default(germinacion)
+}
+
+model registro_acciones {
+  id        Int      @id @default(autoincrement())
+  accion    String
+  fecha     DateTime @default(now())
+  cuenta    cuentas? @relation(fields: [id_cuenta], references: [id])
+  id_cuenta Int?
+}
+
+model permisos {
+  rol                     Rol      @id
+  puede_ver               Boolean  @default(false)
+  puede_agregar           Boolean  @default(false)
+  puede_modificar         Boolean  @default(false)
+  puede_eliminar          Boolean  @default(false)
+  puede_ver_acciones      Boolean  @default(false)
+  puede_gestionar_cuentas Boolean  @default(false)
+}
+
+enum Rol {
+  administrador
+  invitado
+  gelato
+}
+
+enum Estado {
+  activo
+  inactivo
+}
+
+enum EstadoOrganismo {
+  germinacion
+  plantula
+  planta
+  floracion
+  muerto
+}

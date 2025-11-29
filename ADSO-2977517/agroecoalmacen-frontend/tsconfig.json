@@ -27,7 +27,8 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "types": ["node"]   //<--- ESTA ES LA LÍNEA IMPORTANTE
   },
   "include": [
     "next-env.d.ts",
