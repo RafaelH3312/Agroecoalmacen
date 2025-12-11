@@ -1,7 +1,7 @@
 ﻿RAFAEL ANTONIO PALMAR HERNANDEZ
 SENA 2025
 Proyecto: AgroecoAlmacen 
-//
+
 ------------------------------------------------------
 Comandos principales
 ------------------------------------------------------
@@ -35,7 +35,7 @@ Notas adicionales
 ------------------------------------------------------
 Estructura del proyecto con comentarios mínimos
 ------------------------------------------------------
-
+```
 C:.
 ├───agroecoalmacen-backend
 │   ├───src
@@ -105,4 +105,4 @@ C:.
 │           Suculenta Echeveria Iris1.jpg
 ├───ngrok.exe
 └───start-all.ps1                                     # Script para iniciar Spring Boot, Next.js y ngrok automáticamente
-//
+```
