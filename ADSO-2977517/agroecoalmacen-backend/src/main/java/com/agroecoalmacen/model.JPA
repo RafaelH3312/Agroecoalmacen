@@ -1,0 +1,18 @@
+@Entity
+@Table(name = "organismos")
+public class Organismo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String nombre_comun;
+    private String nombre_cientifico;
+    private String tipo;
+    private LocalDate fecha_ingreso;
+    private String ubicacion;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoOrganismo estado;
+
+    // getters y setters
+}

@@ -2,17 +2,17 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 12px;
-  background-color: #f0f0f0; /* igual que desktop */
+  padding: 1rem; /* en lugar de 12px */
+  background-color: #f0f0f0;
 }
 
 .titulo h1 {
   margin: 0;
-  font-size: 18px;
+  font-size: 1.2rem; /* en lugar de 18px */
 }
 
 .titulo p {
   margin: 0;
-  font-size: 12px;
+  font-size: 0.8rem; /* en lugar de 12px */
   color: gray;
 }

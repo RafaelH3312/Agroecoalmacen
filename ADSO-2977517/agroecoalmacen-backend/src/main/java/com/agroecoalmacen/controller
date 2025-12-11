@@ -1,0 +1,17 @@
+@RestController
+@RequestMapping("/api/organismos")
+public class OrganismoController {
+
+    @Autowired
+    private OrganismoRepository organismoRepository;
+
+    @GetMapping
+    public List<Organismo> getAll() {
+        return organismoRepository.findAll();
+    }
+
+    @PostMapping
+    public Organismo create(@RequestBody Organismo organismo) {
+        return organismoRepository.save(organismo);
+    }
+}

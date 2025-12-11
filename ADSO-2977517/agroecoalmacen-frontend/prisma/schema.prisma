@@ -1,47 +1,50 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
 datasource db {
   provider = "mysql"
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model cuentas {
-  id             Int       @id @default(autoincrement())
-  nombre_usuario String    @unique
-  contrasena     String
-  correo         String?
-  rol            Rol       @default(invitado)
-  estado         Estado    @default(activo)
+  id             Int                 @id @default(autoincrement())
+  nombre_usuario String              @unique(map: "nombre_usuario") @db.VarChar(50)
+  contrasena     String              @db.VarChar(100)
+  correo         String?             @db.VarChar(100)
+  rol            Rol                 @default(invitado)
+  estado         Estado?             @default(activo)
   acciones       registro_acciones[]
 }
 
 model organismos {
-  id                Int      @id @default(autoincrement())
-  nombre_comun      String
-  nombre_cientifico String?
-  tipo              String?
-  fecha_ingreso     DateTime
-  ubicacion         String?
-  estado            EstadoOrganismo @default(germinacion)
+  id                Int              @id @default(autoincrement())
+  nombre_comun      String           @db.VarChar(100)
+  nombre_cientifico String?          @db.VarChar(150)
+  tipo              String?          @db.VarChar(50)
+  fecha_ingreso     DateTime         @db.Date
+  ubicacion         String?          @db.VarChar(100)
+  estado            EstadoOrganismo? @default(germinacion)
 }
 
 model registro_acciones {
-  id        Int      @id @default(autoincrement())
-  accion    String
-  fecha     DateTime @default(now())
-  cuenta    cuentas? @relation(fields: [id_cuenta], references: [id])
+  id        Int       @id @default(autoincrement())
   id_cuenta Int?
+  accion    String?   @db.Text
+  fecha     DateTime? @default(now()) @db.Timestamp(0)
+  cuenta    cuentas?  @relation(fields: [id_cuenta], references: [id], onUpdate: NoAction, map: "registro_acciones_ibfk_1")
+
+  @@index([id_cuenta], map: "id_cuenta")
 }
 
 model permisos {
   rol                     Rol      @id
-  puede_ver               Boolean  @default(false)
-  puede_agregar           Boolean  @default(false)
-  puede_modificar         Boolean  @default(false)
-  puede_eliminar          Boolean  @default(false)
-  puede_ver_acciones      Boolean  @default(false)
-  puede_gestionar_cuentas Boolean  @default(false)
+  puede_ver               Boolean? @default(false)
+  puede_agregar           Boolean? @default(false)
+  puede_modificar         Boolean? @default(false)
+  puede_eliminar          Boolean? @default(false)
+  puede_ver_acciones      Boolean? @default(false)
+  puede_gestionar_cuentas Boolean? @default(false)
 }
 
 enum Rol {
