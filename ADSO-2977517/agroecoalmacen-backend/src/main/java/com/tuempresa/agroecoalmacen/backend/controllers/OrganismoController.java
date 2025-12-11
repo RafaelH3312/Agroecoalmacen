@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-
+/**
+ * Controlador REST para gestionar organismos del inventario
+ */
 @RestController
 public class OrganismoController {
 
