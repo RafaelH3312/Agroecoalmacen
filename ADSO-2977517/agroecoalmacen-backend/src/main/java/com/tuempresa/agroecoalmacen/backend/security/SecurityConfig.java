@@ -1,4 +1,4 @@
-package com.tuempresa.agroecoalmacen.security;
+package com.tuempresa.agroecoalmacen.backend.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,11 +9,15 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-            .authorizeHttpRequests()
-            .requestMatchers("/**").permitAll()  // permite todos los endpoints
-            .anyRequest().authenticated();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/organismo/**").permitAll()   // 🔓 Permitir organismo
+                .anyRequest().authenticated()
+            )
+            .formLogin(login -> login.permitAll());
+
         return http.build();
     }
 }
