@@ -5,6 +5,8 @@ Proyecto: AgroecoAlmacen
 ------------------------------------------------------
 Comandos principales
 ------------------------------------------------------
+# Script para iniciar todo automáticamente
+.\start-all.ps1
 
 # Backend (Spring Boot)
 cd agroecoalmacen-backend
@@ -16,19 +18,11 @@ cd ..\agroecoalmacen-frontend
 npm install             # Instala dependencias
 npm run dev             # Ejecuta Next.js
 
-# Comprimir proyecto para entrega
-cd ..\
-Compress-Archive -Path .\Agroecoalmacen\* -DestinationPath "RAFAEL_ANTONIO_PALMAR_HERNANDEZ_AA3_EV01.zip"
-
-# Script para iniciar todo automáticamente
-.\start-all.ps1
 
 ------------------------------------------------------
 Notas adicionales
 ------------------------------------------------------
 
-- Todas las clases y métodos incluyen comentarios explicativos.
-- Se siguen buenas prácticas de codificación y organización de carpetas.
 - El proyecto está listo para ejecutarse localmente o con ngrok para pruebas externas.
 
 
