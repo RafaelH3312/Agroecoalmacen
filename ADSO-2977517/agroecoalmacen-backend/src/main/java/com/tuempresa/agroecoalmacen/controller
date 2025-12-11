@@ -13,5 +13,14 @@ public class OrganismoController {
     @PostMapping
     public Organismo create(@RequestBody Organismo organismo) {
         return organismoRepository.save(organismo);
+        @RestController
+@RequestMapping("/organismo")
+public class OrganismoController {
+
+    @GetMapping
+    public List<Organismo> getAll() {
+        return organismoService.findAll();
+    }
+}
     }
 }
