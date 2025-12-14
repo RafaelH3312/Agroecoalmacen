@@ -1,11 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+
 
 export default function DashboardPage() {
   const [activo, setActivo] = useState<number | null>(null);
+  const [activoSidebar, setActivoSidebar] = useState(true);
+  const [rightMenuOpen, setRightMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const plantas = [
+    { img: "/assets/Echeveria Eris.jpg", nombre: "Echeveria Eris", id: "001" },
+    { img: "/assets/Santa Marta Gold.jpg", nombre: "Santa Marta Gold", id:"002" },
+    { img: "/assets/Punto Rojo.jpg", nombre: "Punto Rojo", id: "003" },
+    { img: "/assets/Pitahaya.jpg", nombre: "Pitahaya", id: "004" },
+  ];
+
+  const seleccionar = (index: number) => {
+    setActivo(index);
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      router.push("/inventario");
+    }, 1500);
+  };
 
   const cerrarSesion = () => {
     if (confirm("¿Seguro que deseas cerrar sesión?")) {
@@ -13,98 +33,220 @@ export default function DashboardPage() {
     }
   };
 
-  const seleccionar = (index: number) => {
-    setActivo(index);
-    // Redirigir después de un pequeño delay para que se vea el efecto activo
-    setTimeout(() => {
-      router.push("/inventario");
-    }, 100); // 100ms, ajustable
-  };
-
-  const plantas = [
-    { img: "/assets/Suculenta Echeveria Iris1.jpg", nombre: "Suculenta Echeveria Iris1", id: "001", temp: "18°C", luz: "45000 lux", estado: "Exceso luminoso", tipo: "alerta" },
-    { img: "/assets/Santa Marta Gold2.jpg", nombre: "Santa Marta Gold", id: "002", temp: "22°C", luz: "88000 lux", estado: "Sobrefertilización", tipo: "alerta" },
-    { img: "/assets/Punto Rojo3.jpg", nombre: "Punto Rojo", id: "003", temp: "28°C", luz: "85000 lux", estado: "Estable", tipo: "activa" },
-    { img: "/assets/Pitahaya4.jpg", nombre: "Pitahaya", id: "004", temp: "28°C", luz: "50000 lux", estado: "Estable", tipo: "activa" },
-  ];
-
   return (
-    <div style={{ margin: 0, fontFamily: "Arial, sans-serif", backgroundColor: "#1a0f2b", color: "#fff", height: "100vh", overflow: "hidden" }}>
-      <div className="fondo" style={{ display: "flex", height: "100vh" }}>
-        <aside className="sidebar" style={{ width: "20%", backgroundColor: "#2a1b3f", padding: 20, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          <div>
-            <h2>Agroecoalmacen</h2>
-            <nav>
-              <a href="/" className="active" style={{ display: "block", color: "#fff", textDecoration: "none", margin: "10px 0", padding: 5, borderRadius: 5 }}> 🗃️⟲ PanelReload</a>
-            </nav>
+    <div style={{ fontFamily: "Arial, sans-serif", overflow: "hidden" }}>
+
+      {/* SIDEBAR IZQUIERDO */}
+      <aside
+        className={`sidebar ${activoSidebar ? "open" : "closed"}`}
+        style={{
+          width: activoSidebar ? 221 : 60,
+          top: 54,
+          backgroundColor: "#2c948b",
+          color: "#fff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: 10,
+          boxSizing: "border-box",
+          boxShadow: "2px 0 15px rgba(0,0,0,0.4)",
+          position: "fixed",
+          left: 0,
+          bottom: 0,
+          overflow: "hidden",
+          zIndex: 10,
+          transition: "width .8s ease",
+        }}
+      >
+        <style>{`
+          .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 5px;
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            white-space: nowrap;
+            transition: opacity .8s ease;
+          }
+          .sidebar.closed .text { display: none; }
+          .sidebar.closed h2 { display: none; }
+          .sidebar.closed .logout-text { display: none; }
+        `}</style>
+
+        <div>
+          <h2>Agroecoalmacen</h2>
+          <nav>
+            <a href="/" className="nav-link">⟲ <span className="text">Reload</span></a>
+            <a href="/ajustes" className="nav-link">⚙️ <span className="text">Ajustes(SINUSO)</span></a>
+            <a href="/buscar" className="nav-link">🔍 <span className="text">Buscar(SINUSO)</span></a>
+          </nav>
+        </div>
+
+        <button className="btn-logout" onClick={cerrarSesion}>Cerrar sesión</button>
+        <h6>🟢 Conexión establecida - Sensores activos</h6>
+      </aside>
+
+      {/* BOTÓN SIDEBAR IZQUIERDO */}
+      <button
+        onClick={() => setActivoSidebar(!activoSidebar)}
+        style={{
+          position: "fixed",
+          top: 54,
+          left: activoSidebar ? 221 : 60,
+          fontSize: 34,
+          backgroundColor: "#2c948b",
+          border: "none",
+          color: "#fff",
+          cursor: "pointer",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
+          transition: "left 0.8s",
+          zIndex: 110,
+        }}
+      >
+        ☰
+      </button>
+
+      {/* CONTENIDO PRINCIPAL */}
+      <div style={{ display: "flex", padding: "20px 10px", flex: 1, position: "relative" }}>
+        <main style={{ flex: 1, display: "flex", flexDirection: "column", gap: 50 }}>
+          <div style={{ textAlign: "center", fontSize: "1.5rem", color: "#2c948b", fontWeight: "bold" }}>
+            Panel Principal AgroecoAlmacen
           </div>
-          <div>
-            <button onClick={cerrarSesion} style={{ marginTop: 20, padding: 8, border: "none", borderRadius: 5, backgroundColor: "#ff4d4d", color: "#fff", cursor: "pointer" }}>⏻ Cerrar sesión</button>
-            <h6>RAFAEL ANTONIO PALMAR HERNANDEZ</h6>
+
+          {/* Spinner */}
+          {loading && (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: activoSidebar ? 220 : 60,
+                width: `calc(100% - ${activoSidebar ? 220 : 60}px)`,
+                height: "100vh",
+                backgroundColor: "rgba(0,0,0,0.4)",
+                backdropFilter: "blur(4px)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 20,
+                zIndex: 999,
+              }}
+            >
+              <div style={{ color: "#fff", fontSize: 20, fontWeight: "bold" }}>Ingresando...</div>
+              <div style={{
+                width: 60,
+                height: 60,
+                borderRadius: "50%",
+                border: "6px solid #fff",
+                borderTop: "6px solid #8a5aff",
+                animation: "spin 1s linear infinite",
+              }} />
+              <style>{`
+                @keyframes spin {
+                  0% { transform: rotate(0deg); }
+                  100% { transform: rotate(360deg); }
+                }
+              `}</style>
+            </div>
+          )}
+
+          {/* Plantas */}
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: "#2c948b",
+            padding: 25,
+            borderRadius: 90,
+            boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+            flex: 1,
+            overflowY: "auto",
+          }}>
+            {plantas.map((planta, index) => (
+              <div
+                key={planta.id}
+                onClick={() => seleccionar(index)}
+                style={{
+                  display: "flex",
+                  flexDirection: "column-reverse",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  borderRadius: 50,
+                  padding: 8,
+                  background: "hsla(275, 17%, 14%, 0.57)",
+                  width: 122,
+                  transition: "0.8s",
+                }}
+              >
+                <img src={planta.img} style={{ width: 80, height: 60, borderRadius: 8 }} />
+                <h5 style={{ color: "#fff", marginTop: 5, fontSize: 12 }}>{planta.nombre}</h5>
+                <p style={{ color: "#fff", fontSize: 10 }}>ID: {planta.id}</p>
+              </div>
+            ))}
           </div>
+        </main>
+
+        {/* PANEL DERECHO */}
+        <aside style={{
+          position: "fixed",
+          top: 54,
+          right: rightMenuOpen ? 0 : -250,
+          width: 250,
+          height: "100%",
+          backgroundColor: "#2c948b",
+          padding: 15,
+          borderRadius: "none",
+          transition: "right 0.8s",
+          zIndex: 100,
+          overflowY: "auto",
+        }}>
+          <style>{`
+            .alert {
+              padding: 20px;
+              margin: 8px 0;
+              border-radius:50px;
+              font-size: 13px;
+              font-weight: bold;
+              color: #fff;
+            }
+            .alert.roja { background: #e74c3c; }
+            .alert.amarilla { background: #f1c40f; color:#000; }
+            .alert.verde { background: #2ecc71; }
+          `}</style>
+
+          {rightMenuOpen && (
+            <>
+              <h2>🧭¡¡ALERTAS!!</h2>
+              <div className="alertas">
+                <div className="alert roja">Pitahaya - Exceso de riego</div>
+                <div className="alert amarilla">Punto Rojo - Deficiencia de Nitrógeno</div>
+                <div className="alert verde">Echeveria - Correcta</div>
+              </div>
+              <h6 className="status">RAFAEL ANTONIO PALMAR HERNANDEZ</h6>
+            </>
+          )}
         </aside>
 
-        <div className="ventana" style={{ display: "flex", width: "80%", gap: 20, padding: "20px 0" }}>
-          <main className="main" style={{ flex: 1, display: "flex", flexDirection: "column", maxHeight: "100vh" }}>
-            <header className="topbar" style={{ padding: "0 20px", marginBottom: 10 }}>
-              <p>🟢 Conexión establecida - Sensores activos</p>
-            </header>
-
-            <div style={{ textAlign: "center", fontSize: "1.5rem", color: "#8a5aff", margin: "10px 0", fontWeight: "bold" }}>
-              Inventario AgroecoAlmacen (Plant's Antony)
-            </div>
-
-            <section className="inventario" style={{ display: "flex", flexDirection: "column", gap: 10, backgroundColor: "#24153a", padding: 10, borderRadius: 15, overflowY: "auto", flex: 1 }}>
-              {plantas.map((planta, index) => (
-                <div
-                  key={index}
-                  onClick={() => seleccionar(index)}
-                  className={`tarjeta ${activo === index ? "activa" : ""}`}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    backgroundColor: activo === index ? "#4a3270" : "#3a2760",
-                    border: `2px solid ${activo === index ? "#8a5aff" : "#5a3f8a"}`,
-                    borderRadius: 10,
-                    padding: 10,
-                    gap: 15,
-                    cursor: "pointer",
-                    transition: "0.3s",
-                    flexWrap: "wrap"
-                  }}
-                >
-                  <img
-                    src={planta.img}
-                    alt={planta.nombre}
-                    style={{
-                      width: 120,
-                      height: 90,
-                      objectFit: "cover",
-                      borderRadius: 8,
-                      // opacity ahora siempre 1 para no bloquear clic
-                      opacity: 1,
-                      transition: "0.5s"
-                    }}
-                  />
-                  <div className="info" style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-                    <h2 style={{ fontSize: "1.1rem", margin: 0, padding: "6px 8px", borderBottom: "2px solid #8a5aff" }}>{planta.nombre}</h2>
-                    <p><strong>ID:</strong> {planta.id}</p>
-                    <p><strong>Temperatura:</strong> {planta.temp}</p>
-                    <p><strong>Luz:</strong> {planta.luz}</p>
-                    <p className={planta.tipo === "alerta" ? "estado alerta" : "estado activa"}>{planta.estado}</p>
-                  </div>
-                </div>
-              ))}
-            </section>
-          </main>
-
-          <aside className="control-parental" style={{ width: "25%", backgroundColor: "#2a1b3f", padding: 15, borderRadius: 10, display: "flex", flexDirection: "column", gap: 10, maxHeight: "100vh", overflowY: "auto" }}>
-            <h2>🧭 Control Parental</h2>
-            <div className="alert roja">Pitahaya - Exceso de riego</div>
-            <div className="alert amarilla">Pimentón - Deficiencia de Nitrógeno</div>
-            <div className="alert verde">Echeveria - Correcta</div>
-          </aside>
-        </div>
+        {/* BOTÓN PANEL DERECHO */}
+        <button
+          onClick={() => setRightMenuOpen(!rightMenuOpen)}
+          style={{
+            position: "fixed",
+            top: 54,
+            right: rightMenuOpen ? 250 : 0,
+            fontSize: 34,
+            backgroundColor: "#2c948b",
+            border: "none",
+            color: "#fff",
+            cursor: "pointer",
+            boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
+            transition: "right 0.8s",
+            zIndex: 200,
+          }}
+        >
+          📩
+        </button>
       </div>
     </div>
   );

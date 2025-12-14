@@ -6,7 +6,6 @@ public class Organismo {
     private int id;
 
     private String nombre_comun;
-    private String nombre_cientifico;
     private String tipo;
     private LocalDate fecha_ingreso;
     private String ubicacion;

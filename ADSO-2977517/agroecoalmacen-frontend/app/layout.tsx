@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           margin: 0,
           fontFamily: "Arial, sans-serif",
           backgroundColor: "#1a0f2b",
-          color: "#fff",
+          color: "#16ccb4ff",
           minHeight: "100vh",
           display: "flex",
           justifyContent: "center",

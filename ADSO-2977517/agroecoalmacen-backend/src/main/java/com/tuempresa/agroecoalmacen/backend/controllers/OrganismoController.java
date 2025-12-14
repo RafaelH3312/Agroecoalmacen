@@ -1,43 +1,41 @@
 package com.tuempresa.agroecoalmacen.backend.controllers;
 
-import com.tuempresa.agroecoalmacen.backend.models.Organismo;
-import com.tuempresa.agroecoalmacen.backend.services.OrganismoService;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.lang.NonNull;
+import com.tuempresa.agroecoalmacen.backend.services.organismoService; // Import correcto
+import com.tuempresa.agroecoalmacen.backend.models.organismo;
 import java.util.List;
 
 @RestController
-@RequestMapping("/organismo")
-public class OrganismoController {
+@RequestMapping("/organismos")
+public class organismocontroller {
 
-    private final OrganismoService service;
+    private final organismoService service;
 
-    public OrganismoController(OrganismoService service) {
+    public organismocontroller(organismoService service) {
         this.service = service;
     }
 
     @GetMapping
-    public List<Organismo> getAllOrganismos() {
-        return service.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Organismo getOrganismoById(@PathVariable Long id) {
-        return service.findById(id);
-    }
-
-    @PostMapping
-    public Organismo createOrganismo(@RequestBody Organismo organismo) {
-        return service.save(organismo);
+    public List<organismo> getAll() {
+        return service.getAll();
     }
 
     @PutMapping("/{id}")
-    public Organismo updateOrganismo(@PathVariable Long id, @RequestBody Organismo body) {
-        return service.update(id, body);
+    public organismo update(
+            @PathVariable @NonNull Long id,
+            @RequestBody @NonNull organismo organismo
+    ) {
+        return service.update(id, organismo);
+    }
+
+    @PostMapping
+    public organismo save(@RequestBody @NonNull organismo organismo) {
+        return service.save(organismo);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteOrganismo(@PathVariable Long id) {
+    public void delete(@PathVariable @NonNull Long id) {
         service.delete(id);
     }
 }

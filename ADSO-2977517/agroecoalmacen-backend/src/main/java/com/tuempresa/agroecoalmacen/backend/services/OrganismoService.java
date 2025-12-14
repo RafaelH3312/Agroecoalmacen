@@ -1,52 +1,43 @@
 package com.tuempresa.agroecoalmacen.backend.services;
 
-import com.tuempresa.agroecoalmacen.backend.models.Organismo;
-import com.tuempresa.agroecoalmacen.backend.repositories.OrganismoRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-
+import com.tuempresa.agroecoalmacen.backend.repositories.organismorepository;
+import com.tuempresa.agroecoalmacen.backend.models.organismo;
 import java.util.List;
 
 @Service
-public class OrganismoService {
+public class organismoService {
+    private final organismorepository repository;
 
-    private final OrganismoRepository repository;
-
-    public OrganismoService(OrganismoRepository repository) {
+    public organismoService(@NonNull organismorepository repository) {
         this.repository = repository;
     }
 
-    // LISTAR TODOS
-    public List<Organismo> findAll() {
+    public List<organismo> getAll() {
         return repository.findAll();
     }
 
-    // BUSCAR UNO POR ID
-    public Organismo findById(Long id) {
-        return repository.findById(id).orElse(null);
+    public organismo update(@NonNull Long id, @NonNull organismo updated) {
+        return repository.findById(id)
+                .map(org -> {
+                    org.setNombre_comun(updated.getNombre_comun());
+                    org.setTipo(updated.getTipo());
+                    org.setFecha_ingreso(updated.getFecha_ingreso());
+                    org.setUbicacion(updated.getUbicacion());
+                    org.setEstado(updated.getEstado());
+                    org.setTemp(updated.getTemp());
+                    org.setLuz(updated.getLuz());
+                    org.setImg(updated.getImg());
+                    return repository.save(org);
+                }).orElseThrow(() -> new RuntimeException("Organismo no encontrado"));
     }
 
-    // CREAR
-    public Organismo save(Organismo organismo) {
+    public organismo save(@NonNull organismo organismo) {
         return repository.save(organismo);
     }
 
-    // ACTUALIZAR
-    public Organismo update(Long id, Organismo body) {
-        Organismo o = repository.findById(id).orElse(null);
-        if (o == null) return null;
-
-        o.setNombre_comun(body.getNombre_comun());
-        o.setNombre_cientifico(body.getNombre_cientifico());
-        o.setTipo(body.getTipo());
-        o.setFecha_ingreso(body.getFecha_ingreso());
-        o.setUbicacion(body.getUbicacion());
-        o.setEstado(body.getEstado());
-
-        return repository.save(o);
-    }
-
-    // ELIMINAR
-    public void delete(Long id) {
+    public void delete(@NonNull Long id) {
         repository.deleteById(id);
     }
 }

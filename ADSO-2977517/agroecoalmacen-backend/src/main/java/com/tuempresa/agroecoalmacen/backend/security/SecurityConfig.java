@@ -11,12 +11,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+            // Permitimos todas las rutas para simplificar desarrollo
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/organismo/**").permitAll()   // 🔓 Permitir organismo
-                .anyRequest().authenticated()
+                .requestMatchers("/**").permitAll()
             )
-            .formLogin(login -> login.permitAll());
+            // Deshabilitamos CSRF para pruebas con frontend
+            .csrf(csrf -> csrf.disable())
+            // Habilitamos CORS si necesitas desde frontend
+            .cors(cors -> cors.disable());
 
         return http.build();
     }
