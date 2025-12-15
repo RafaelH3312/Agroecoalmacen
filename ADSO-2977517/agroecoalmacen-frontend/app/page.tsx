@@ -83,8 +83,8 @@ export default function DashboardPage() {
   <h2>Agroecoalmacen</h2>
   <nav>
     <a href="/" className="nav-link">⟲ <span className="text">Reload</span></a>
-    <a href="/ajustes" className="nav-link">⚙️ <span className="text">Ajustes</span></a>
-    <a href="/buscar" className="nav-link">🔍 <span className="text">Buscar</span></a>
+    <a href="/ajustes" className="nav-link">⚙️ <span className="text">Ajustes(SINUSO)</span></a>
+    <a href="/buscar" className="nav-link">🔍 <span className="text">Busca(SINUSO)</span></a>
   </nav>
 
   <style jsx>{`

@@ -9,11 +9,12 @@ export default function LoginPage() {
   const [clave, setClave] = useState("");
   const [error, setError] = useState("");
   const [mostrarAyuda, setMostrarAyuda] = useState(false);
+  
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (usuario === "admin" && clave === "weed") {
-      router.push("/inventario"); // redirige a la página de inventario
+      router.push("/"); 
     } else {
       setError("Usuario o contraseña incorrectos");
     }
@@ -90,6 +91,63 @@ export default function LoginPage() {
             </button>
           </div>
         </form>
+        <style jsx>{`
+  .usuario-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-ayuda {
+    background: #27ae60; /* verde de tu tema */
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .tooltip-ayuda {
+    position: absolute;
+    top: 38px;
+    left: 0;
+    background: #2c948b; /* azul-verde de la página */
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    width: 210px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 10;
+    font-size: 13px;
+  }
+
+  .tooltip-ayuda.abierto {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .tooltip-arrow {
+    position: absolute;
+    top: -6px;
+    left: 12px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #2c948b; /* mismo color del tooltip */
+  }
+
+  .tooltip-ayuda p {
+    margin: 2px 0;
+  }
+`}</style>
 
         <footer>
           <p>© 2025 Agroecoalmacen. Todos los derechos reservados.</p>
