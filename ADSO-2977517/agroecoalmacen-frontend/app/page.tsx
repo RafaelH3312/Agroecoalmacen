@@ -3,6 +3,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
+interface Planta {
+  img: string;
+  nombre: string;
+  id: string;
+}
 
 export default function DashboardPage() {
   const [activo, setActivo] = useState<number | null>(null);
@@ -11,9 +16,9 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const plantas = [
+  const plantas: Planta[] = [
     { img: "/assets/Echeveria Eris.jpg", nombre: "Echeveria Eris", id: "001" },
-    { img: "/assets/Santa Marta Gold.jpg", nombre: "Santa Marta Gold", id:"002" },
+    { img: "/assets/Santa Marta Gold.jpg", nombre: "Santa Marta Gold", id: "002" },
     { img: "/assets/Punto Rojo.jpg", nombre: "Punto Rojo", id: "003" },
     { img: "/assets/Pitahaya.jpg", nombre: "Pitahaya", id: "004" },
   ];
@@ -79,8 +84,8 @@ export default function DashboardPage() {
           <h2>Agroecoalmacen</h2>
           <nav>
             <a href="/" className="nav-link">⟲ <span className="text">Reload</span></a>
-            <a href="/ajustes" className="nav-link">⚙️ <span className="text">Ajustes(SINUSO)</span></a>
-            <a href="/buscar" className="nav-link">🔍 <span className="text">Buscar(SINUSO)</span></a>
+            <a href="/ajustes" className="nav-link">⚙️ <span className="text">Ajustes</span></a>
+            <a href="/buscar" className="nav-link">🔍 <span className="text">Buscar</span></a>
           </nav>
         </div>
 
@@ -163,10 +168,10 @@ export default function DashboardPage() {
             flex: 1,
             overflowY: "auto",
           }}>
-            {plantas.map((planta, index) => (
+            {plantas.map((planta) => (
               <div
                 key={planta.id}
-                onClick={() => seleccionar(index)}
+                onClick={() => seleccionar(Number(planta.id))}
                 style={{
                   display: "flex",
                   flexDirection: "column-reverse",
@@ -180,7 +185,7 @@ export default function DashboardPage() {
                 }}
               >
                 <img src={planta.img} style={{ width: 80, height: 60, borderRadius: 8 }} />
-                <h5 style={{ color: "#fff", marginTop: 5, fontSize: 12 }}>{planta.nombre}</h5>
+                <h4 style={{ color: "#fff", marginTop: 5, fontSize: 12 }}>{planta.nombre}</h4>
                 <p style={{ color: "#fff", fontSize: 10 }}>ID: {planta.id}</p>
               </div>
             ))}
@@ -221,9 +226,9 @@ export default function DashboardPage() {
               <div className="alertas">
                 <div className="alert roja">Pitahaya - Exceso de riego</div>
                 <div className="alert amarilla">Punto Rojo - Deficiencia de Nitrógeno</div>
-                <div className="alert verde">Echeveria - Correcta</div>
+                <div className="alert verde">Echeveria - Correcta</div> 
+                <h6 className="status">RAFAEL ANTONIO PALMAR HERNANDEZ</h6>
               </div>
-              <h6 className="status">RAFAEL ANTONIO PALMAR HERNANDEZ</h6>
             </>
           )}
         </aside>

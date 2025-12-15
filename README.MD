@@ -2,7 +2,7 @@
 SENA 2025
 Proyecto: AgroecoAlmacen 
 
-Sistema de inventario y monitoreo de plantas, 
+Concatenacion del sistema de inventario y monitoreo de plantas, 
 con backend en Java y frontend en Next.js. 
 Permite ver fichas técnicas, actualizar datos,
 monitorear variables ambientales y recibir alertas,
@@ -10,8 +10,14 @@ todo en tiempo real. Diseño responsive,
 transiciones suaves y sidebar/paneles interactivos.
 Escalable y listo para futuras mejoras.
 
+terminal. y puebas DEMANERALOCAL
+( npm run dev 
+ mvn clean install.
+./mvnw spring-boot:run)
+
+
 ------------------------------------------------------
-Comandos principales
+Comandos principales (NO ES NECESARIO)
 ------------------------------------------------------
 # Script para iniciar todo automáticamente
 .\start-all.ps1
