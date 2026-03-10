@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "organismos") // nombre de la tabla en MySQL
-public class organismo {
+public class Organismo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +19,9 @@ public class organismo {
     private String luz;
     private String img;
 
-    public organismo() {} // constructor vacío obligatorio para JPA
+    public Organismo() {} // constructor vacío obligatorio para JPA
 
-    public organismo(Long id, String nombre_comun, String tipo, String fecha_ingreso,
+    public Organismo(Long id, String nombre_comun, String tipo, String fecha_ingreso,
                      String ubicacion, String estado, String temp, String luz, String img) {
         this.id = id;
         this.nombre_comun = nombre_comun;

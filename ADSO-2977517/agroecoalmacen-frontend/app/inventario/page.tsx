@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 
 interface Organismo {
   id: number;
@@ -28,8 +29,7 @@ function mapOrganismo(data: any): Organismo {
   };
 }
 
-export default function Inventario() {{}
-  // ── HOOKS ──
+export default function Inventario() {
   const [organismos, setOrganismos] = useState<Organismo[]>([]);
   const [organismoSeleccionado, setOrganismoSeleccionado] = useState<Organismo | null>(null);
   const [preview, setPreview] = useState<Organismo | null>(null);
@@ -39,11 +39,9 @@ export default function Inventario() {{}
   const [animando, setAnimando] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [activoSidebar, setActivoSidebar] = useState(true);
-  
-
-  // Formulario nueva planta
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const [nuevaPlanta, setNuevaPlanta] = useState<Omit<Organismo, "id" | "img">>({
+
+  const [formPlanta, setFormPlanta] = useState<Omit<Organismo, "id" | "img">>({
     nombre_comun: "",
     tipo: "",
     fecha_ingreso: "",
@@ -53,8 +51,11 @@ export default function Inventario() {{}
     luz: "",
   });
 
-  // ── FUNCIONES ──
-  const cerrarSesion = () => alert("Sesión cerrada");
+  const cerrarSesion = () => {
+    if (confirm("¿Seguro que deseas cerrar sesión?")) {
+      // lógica de logout
+    }
+  };
 
   useEffect(() => {
     async function fetchOrganismos() {
@@ -62,62 +63,38 @@ export default function Inventario() {{}
       const data = await res.json();
       const mapped = data.map(mapOrganismo);
       setOrganismos(mapped);
-      setOrganismoSeleccionado(mapped[0]);
+      if (mapped.length > 0) setOrganismoSeleccionado(mapped[0]);
     }
     fetchOrganismos();
   }, []);
 
+  // Seleccionar un organismo existente (editar)
   const seleccionarOrganismo = (org: Organismo) => {
     setAnimando(true);
     setLoading(true);
     setTimeout(() => {
       setOrganismoSeleccionado(org);
+      setFormPlanta({
+        nombre_comun: org.nombre_comun,
+        tipo: org.tipo,
+        fecha_ingreso: org.fecha_ingreso,
+        ubicacion: org.ubicacion,
+        estado: org.estado,
+        temp: org.temp,
+        luz: org.luz,
+      });
+      setPreviewImagen(org.img);
       setLoading(false);
       setAnimando(false);
       setPreview(null);
+      setMostrarFormulario(true);
     }, 500);
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!organismoSeleccionado) return;
-    const { name, value } = e.target;
-    setOrganismoSeleccionado({ ...organismoSeleccionado, [name]: value });
-  };
-
-  const handleImagenChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!organismoSeleccionado) return;
-    if (e.target.files && e.target.files[0]) {
-      const url = URL.createObjectURL(e.target.files[0]);
-      setPreviewImagen(url);
-      setOrganismoSeleccionado({ ...organismoSeleccionado, img: url });
-    }
-  };
-
-  const guardarCambios = async () => {
-    if (!organismoSeleccionado) return;
-    setGuardando(true);
-    await fetch(`http://localhost:8080/organismos/${organismoSeleccionado.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(organismoSeleccionado),
-    });
-    alert("💾 Cambios guardados");
-    setGuardando(false);
-  };
-
-  const eliminarOrganismo = async () => {
-    if (!organismoSeleccionado) return;
-    if (!confirm("¿Eliminar este organismo?")) return;
-    await fetch(`http://localhost:8080/organismos/${organismoSeleccionado.id}`, { method: "DELETE" });
-    setOrganismos((prev) => prev.filter((o) => o.id !== organismoSeleccionado.id));
+  // ABRIR FORMULARIO PARA AÑADIR
+  const abrirFormularioNuevo = () => {
     setOrganismoSeleccionado(null);
-  };
-
-  const agregarPlanta = () => {
-    const id = organismos.length > 0 ? organismos[organismos.length - 1].id + 1 : 1;
-    const nueva: Organismo = { ...nuevaPlanta, id, img: previewImagen || "/assets/default.jpg" };
-    setOrganismos([...organismos, nueva]);
-    setNuevaPlanta({
+    setFormPlanta({
       nombre_comun: "",
       tipo: "",
       fecha_ingreso: "",
@@ -127,14 +104,172 @@ export default function Inventario() {{}
       luz: "",
     });
     setPreviewImagen(null);
-    setMostrarFormulario(false);
+    setMostrarFormulario(true);
   };
 
-  // ── JSX ──
+  // CANCELAR FORMULARIO
+  const cancelarFormulario = () => {
+    setMostrarFormulario(false);
+    setOrganismoSeleccionado(null);
+    setPreviewImagen(null);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormPlanta({ ...formPlanta, [name]: value });
+  };
+
+  const handleImagenChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const url = URL.createObjectURL(e.target.files[0]);
+      setPreviewImagen(url);
+    }
+  };
+
+  const guardarCambios = async () => {
+    if (!organismoSeleccionado) return;
+    setGuardando(true);
+    const updated: Organismo = { ...organismoSeleccionado, ...formPlanta, img: previewImagen || organismoSeleccionado.img };
+    await fetch(`http://localhost:8080/organismos/${organismoSeleccionado.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated),
+    });
+    setOrganismos(prev => prev.map(o => (o.id === updated.id ? updated : o)));
+    setOrganismoSeleccionado(updated);
+    alert("💾 Cambios guardados");
+    setGuardando(false);
+    cancelarFormulario();
+  };
+
+  const eliminarOrganismo = async () => {
+    if (!organismoSeleccionado) return;
+    if (!confirm("¿Eliminar este organismo?")) return;
+    await fetch(`http://localhost:8080/organismos/${organismoSeleccionado.id}`, { method: "DELETE" });
+    setOrganismos(prev => prev.filter(o => o.id !== organismoSeleccionado.id));
+    cancelarFormulario();
+  };
+
+  const agregarPlanta = async () => {
+    const id = organismos.length > 0 ? organismos[organismos.length - 1].id + 1 : 1;
+    const nueva: Organismo = { ...formPlanta, id, img: previewImagen || "/assets/img.jpg" };
+
+    try {
+      const res = await fetch("http://localhost:8080/organismos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nueva),
+      });
+
+      if (!res.ok) throw new Error("Error al guardar la planta en el servidor");
+
+      setOrganismos([...organismos, nueva]);
+      setFormPlanta({ nombre_comun: "", tipo: "", fecha_ingreso: "", ubicacion: "", estado: "", temp: "", luz: "" });
+      setPreviewImagen(null);
+      // deja el formulario abierto para añadir otra planta
+    } catch (error) {
+      alert("❌ No se pudo guardar la planta: " + error);
+    }
+  };
+
   return (
     <div style={{ fontFamily: "Arial, sans-serif", overflow: "hidden" }}>
+      {/* MAIN */}
+      <main style={{ padding: 20, marginLeft: 60 }}>
+        <h1>AgroecoAlmacen</h1>
+        <h6>Plant's Antony</h6>
 
-      {/* SIDEBAR IZQUIERDO */}
+        <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+          {/* VISOR PRINCIPAL */}
+          <div style={{
+            flex: 1,
+            height: 382,
+            background: "#111",
+            borderRadius: 12,
+            overflow: "hidden",
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            opacity: animando ? 0.4 : 1,
+            transform: animando ? "scale(.95)" : "scale(1)",
+            transition: "0.9s"
+          }}>
+            {loading ? "⏳ Espere..." : "📷Live"}
+            <img src={previewImagen || (preview || organismoSeleccionado)?.img || "/assets/default.png"}
+                 alt={(preview || organismoSeleccionado)?.nombre_comun || "Preview"}
+                 style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 12 }} />
+          </div>
+
+          {/* FORMULARIO */}
+          {mostrarFormulario && (
+            <div style={{
+              width: 320,
+              background: "#352441ff",
+              padding: 20,
+              borderRadius: 16,
+              color: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+              boxSizing: "border-box",
+            }}>
+              <h3 style={{ textAlign: "center" }}>{organismoSeleccionado ? "Editar Planta" : "Registrar Nueva Planta"}</h3>
+
+              <input placeholder="Nombre" name="nombre_comun" value={formPlanta.nombre_comun} onChange={handleChange} />
+              <input placeholder="Tipo" name="tipo" value={formPlanta.tipo} onChange={handleChange} />
+              <input placeholder="Fecha ingreso" name="fecha_ingreso" value={formPlanta.fecha_ingreso} onChange={handleChange} />
+              <input placeholder="Ubicación" name="ubicacion" value={formPlanta.ubicacion} onChange={handleChange} />
+              <input placeholder="Estado" name="estado" value={formPlanta.estado} onChange={handleChange} />
+              <input placeholder="Temp" name="temp" value={formPlanta.temp} onChange={handleChange} />
+              <input placeholder="Luz" name="luz" value={formPlanta.luz} onChange={handleChange} />
+              <input type="file" accept="image/*" onChange={handleImagenChange} />
+              {previewImagen && <img src={previewImagen} alt="Preview" style={{ width: "100%", height: 200, objectFit: "cover", borderRadius: 8 }} />}
+
+              <div style={{ display: "flex", gap: 10, marginTop: 5 }}>
+                {!organismoSeleccionado
+                  ? <button onClick={agregarPlanta} style={{ background: "#2980b9", color: "#fff", padding: 6, borderRadius: 6 }}>💾 Guardar  </button>
+                  : <button onClick={guardarCambios} style={{ background: "#2ecc71", color: "#fff", padding: 6, borderRadius: 6 }}>💾 Guardar Cambios</button>
+                }
+                {organismoSeleccionado && <button onClick={eliminarOrganismo} style={{ background: "#e74c3c", color: "#fff", padding: 6, borderRadius: 6 }}>🗑️ Eliminar</button>}
+                <button onClick={() => setMostrarFormulario(false)} style={{ background: "#bdc3c7", color: "#000", padding: 6, borderRadius: 6 }}>❌ Cancelar</button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* BOTÓN TOGGLE FORMULARIO AÑADIR */}
+      <div style={{ position: "relative", marginTop: 20, height: 60 }}>
+        <button
+          onClick={abrirFormularioNuevo}
+          style={{
+            position: "absolute",
+            left: 0,
+            background: "#27ae60",
+            color: "#fff",
+            padding: "10px 18px",
+            borderRadius: 30,
+            fontSize: 16,
+          }}
+        >
+          ➕ Añadir Planta
+        </button>
+      </div>
+
+    
+
+        {/* MINI-FICHAS */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 200px)", gap: 15, marginTop: 25 }}>
+          {organismos.map(o => (
+            <div key={o.id} onClick={() => seleccionarOrganismo(o)} onMouseEnter={() => setPreview(o)} onMouseLeave={() => setPreview(null)} style={{ cursor: "pointer", borderRadius: 12, overflow: "hidden", background: "hsla(275,17%,14%,0.57)", padding: 5, textAlign: "center", color: "#fff" }}>
+              <img src={o.img} alt={o.nombre_comun} style={{ width: "100%", height: 140, objectFit: "cover", borderRadius: 8, transition: "transform 0.3s" }} />
+              <h4 style={{ textAlign: "center", color: "#2c948b" }}>{o.nombre_comun}</h4>
+            </div>
+          ))}
+        </div>
+      </main>
+
+     {/* SIDEBAR IZQUIERDO */}
       <aside
         className={`sidebar ${activoSidebar ? "open" : "closed"}`}
         style={{
@@ -176,8 +311,8 @@ export default function Inventario() {{}
   <h2>Agroecoalmacen</h2>
   <nav>
     <a href="/" className="nav-link">⟲ <span className="text">Reload</span></a>
-    <a href="/ajustes" className="nav-link">⚙️ <span className="text">Ajustes</span></a>
-    <a href="/buscar" className="nav-link">🔍 <span className="text">Buscar</span></a>
+    <a href="/ajustes" className="nav-link">⚙️ <span className="text">Ajustes(SINUSO)</span></a>
+    <a href="/buscar" className="nav-link">🔍 <span className="text">Busca(SINUSO)</span></a>
   </nav>
 
   <style jsx>{`
@@ -233,92 +368,7 @@ export default function Inventario() {{}
         ☰
       </button>
 
-      {/* MAIN */}
-      <main style={{ padding: 20, marginLeft: 60 }}>
-        <div className="titulo-brillante">
-          <h1>AgroecoAlmacen</h1>
-          <h6>Plant's Antony</h6>
-        </div>
-
-        <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
-          {/* VISOR PRINCIPAL */}
-          <div style={{ flex: 1, height: 382, background: "#111", borderRadius: 12, overflow: "hidden", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", opacity: animando ? 0.4 : 1, transform: animando ? "scale(.95)" : "scale(1)", transition: "0.9s" }}>
-            {loading ? "⏳ Espere..." : "📷Live"}
-            {(() => {
-              const imagenAMostrar = previewImagen
-                ? previewImagen
-                : (preview || organismoSeleccionado)?.img || "/assets/default.png";
-              const altTexto = (preview || organismoSeleccionado)?.nombre_comun || "Preview";
-              return <img src={imagenAMostrar} alt={altTexto} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 12 }} />;
-            })()}
-          </div>
-
-          {/* FICHA DETALLE */}
-          {organismoSeleccionado && (
-            <div style={{ width: 320, background: "#352441ff", padding: 20, borderRadius: 16, color: "#fff", display: "flex", flexDirection: "column", gap: 10 }}>
-              <h2 style={{ textAlign: "center" }}>{organismoSeleccionado.nombre_comun}</h2>
-              <p><strong>Tipo:</strong> {organismoSeleccionado.tipo}</p>
-              <p><strong>Ubicación:</strong> {organismoSeleccionado.ubicacion}</p>
-              <p><strong>Estado:</strong> {organismoSeleccionado.estado}</p>
-              <label>
-                Temp
-                <input name="temp" value={organismoSeleccionado.temp} onChange={handleChange} style={{ width: "100%", margin: "5px 0", padding: 6, borderRadius: 6 }}/>
-              </label>
-              <label>
-                Luz
-                <input name="luz" value={organismoSeleccionado.luz} onChange={handleChange} style={{ width: "100%", margin: "5px 0", padding: 6, borderRadius: 6 }}/>
-              </label>
-              <label>
-                Imagen:
-                <input type="file" accept="image/*" onChange={handleImagenChange} />
-              </label>
-
-              <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-                <button onClick={guardarCambios} style={{ background: "#2ecc71", color: "#fff", padding: "10px 18px", border: "none", borderRadius: 30 }}>💾 Guardar</button>
-                <button onClick={eliminarOrganismo} style={{ background: "#e74c3c", color: "#fff", padding: "10px 18px", border: "none", borderRadius: 30 }}>🗑️ Eliminar</button>
-                <button onClick={() => setMostrarFormulario(true)} style={{ background: "#27ae60", color: "#fff", padding: "10px 18px", borderRadius: 30 }}>➕ Añadir Planta</button>
-              </div>
-
-              {/* FORMULARIO NUEVA PLANTA */}
-              {mostrarFormulario && (
-                <div style={{ marginTop: 10, background: "#fff", color: "#000", padding: 10, borderRadius: 8 }}>
-                  <h3>Registrar Nueva Planta</h3>
-                  <input placeholder="Nombre" value={nuevaPlanta.nombre_comun} onChange={e => setNuevaPlanta({...nuevaPlanta, nombre_comun: e.target.value})} style={{ width: "100%", marginBottom: 5 }} />
-                  <input placeholder="Tipo" value={nuevaPlanta.tipo} onChange={e => setNuevaPlanta({...nuevaPlanta, tipo: e.target.value})} style={{ width: "100%", marginBottom: 5 }} />
-                  <input placeholder="Fecha ingreso" value={nuevaPlanta.fecha_ingreso} onChange={e => setNuevaPlanta({...nuevaPlanta, fecha_ingreso: e.target.value})} style={{ width: "100%", marginBottom: 5 }} />
-                  <input placeholder="Ubicación" value={nuevaPlanta.ubicacion} onChange={e => setNuevaPlanta({...nuevaPlanta, ubicacion: e.target.value})} style={{ width: "100%", marginBottom: 5 }} />
-                  <input placeholder="Estado" value={nuevaPlanta.estado} onChange={e => setNuevaPlanta({...nuevaPlanta, estado: e.target.value})} style={{ width: "100%", marginBottom: 5 }} />
-                  <input placeholder="Temp" value={nuevaPlanta.temp} onChange={e => setNuevaPlanta({...nuevaPlanta, temp: e.target.value})} style={{ width: "100%", marginBottom: 5 }} />
-                  <input placeholder="Luz" value={nuevaPlanta.luz} onChange={e => setNuevaPlanta({...nuevaPlanta, luz: e.target.value})} style={{ width: "100%", marginBottom: 5 }} />
-                  
-                  <input type="file" accept="image/*" onChange={(e) => {
-                    if (!e.target.files || e.target.files.length === 0) return;
-                    const file = e.target.files[0];
-                    setPreviewImagen(URL.createObjectURL(file));
-                  }} />
-                  {previewImagen && <img src={previewImagen} alt="Preview" style={{ width: "100%", height: 200, objectFit: "cover", borderRadius: 8 }} />}
-
-                  <div style={{ marginTop: 5, display: "flex", gap: 10 }}>
-                    <button onClick={agregarPlanta} style={{ background: "#2980b9", color: "#fff", padding: 6, borderRadius: 6 }}>Guardar</button>
-                    <button onClick={() => setMostrarFormulario(false)} style={{ background: "#bdc3c7", color: "#000", padding: 6, borderRadius: 6 }}>Cancelar</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* MINI-FICHAS */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 200px)", gap: 15, marginTop: 25 }}>
-          {organismos.map(o => (
-            <div key={o.id} onClick={() => seleccionarOrganismo(o)} onMouseEnter={() => setPreview(o)} onMouseLeave={() => setPreview(null)} style={{ cursor: "pointer", borderRadius: 12, overflow: "hidden", background: "hsla(275,17%,14%,0.57)", padding: 5, textAlign: "center", color: "#fff" }}>
-              <img src={o.img} alt={o.nombre_comun} style={{ width: "100%", height: 140, objectFit: "cover", borderRadius: 8, transition: "transform 0.3s" }} />
-              <h4 style={{ textAlign: "center", color: "#2c948b" }}>{o.nombre_comun}</h4>
-            </div>
-          ))}
-        </div>
-      </main>
-
+      
       {/* PANEL DERECHO */}
       <aside
         className={`sidebar ${activoSidebar ? "open" : "closed"}`}
@@ -432,6 +482,6 @@ export default function Inventario() {{}
         >
           📩
         </button>
-      </div>
+    </div>
   );
 }

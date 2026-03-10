@@ -1,0 +1,17 @@
+# Java / Maven
+target/
+*.class
+*.log
+
+# Node
+node_modules/
+.next/
+npm-debug.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

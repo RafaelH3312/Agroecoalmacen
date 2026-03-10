@@ -11,7 +11,7 @@ transiciones suaves y sidebar/paneles interactivos.
 Escalable y listo para futuras mejoras.
 
 terminal. y puebas DEMANERALOCAL
-( npm run dev 
+( ls 
  mvn clean install.
 ./mvnw spring-boot:run)
 
@@ -37,11 +37,8 @@ npm run dev             # Ejecuta Next.js
 Notas adicionales
 ------------------------------------------------------
 
-- El proyecto está listo para ejecutarse localmente o con ngrok para pruebas externas.
-
 
 ------------------------------------------------------
-Estructura del proyecto con comentarios mínimos
 ------------------------------------------------------
 ```
 C:.
@@ -111,6 +108,6 @@ C:.
 │           Punto Rojo3.jpg
 │           Santa Marta Gold2.jpg
 │           Suculenta Echeveria Iris1.jpg
-├───ngrok.exe
+├───
 └───start-all.ps1                                     # Script para iniciar Spring Boot, Next.js y ngrok automáticamente
 ```

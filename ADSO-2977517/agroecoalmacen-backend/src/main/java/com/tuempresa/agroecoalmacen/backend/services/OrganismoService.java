@@ -2,23 +2,23 @@ package com.tuempresa.agroecoalmacen.backend.services;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-import com.tuempresa.agroecoalmacen.backend.repositories.organismorepository;
-import com.tuempresa.agroecoalmacen.backend.models.organismo;
+import com.tuempresa.agroecoalmacen.backend.repositories.OrganismoRepository;
+import com.tuempresa.agroecoalmacen.backend.models.Organismo;
 import java.util.List;
 
 @Service
-public class organismoService {
-    private final organismorepository repository;
+public class OrganismoService {
+    private final OrganismoRepository repository;
 
-    public organismoService(@NonNull organismorepository repository) {
+    public OrganismoService(@NonNull OrganismoRepository repository) {
         this.repository = repository;
     }
 
-    public List<organismo> getAll() {
+    public List<Organismo> getAll() {
         return repository.findAll();
     }
 
-    public organismo update(@NonNull Long id, @NonNull organismo updated) {
+    public Organismo update(@NonNull Long id, @NonNull Organismo updated) {
         return repository.findById(id)
                 .map(org -> {
                     org.setNombre_comun(updated.getNombre_comun());
@@ -33,7 +33,7 @@ public class organismoService {
                 }).orElseThrow(() -> new RuntimeException("Organismo no encontrado"));
     }
 
-    public organismo save(@NonNull organismo organismo) {
+    public Organismo save(@NonNull Organismo organismo) {
         return repository.save(organismo);
     }
 
