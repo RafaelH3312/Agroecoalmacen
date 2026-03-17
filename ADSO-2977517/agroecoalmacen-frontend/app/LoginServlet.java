@@ -1,9 +1,23 @@
+"use client";
+
+import { useEffect } from "react";
+
 export default function DashboardPage() {
   const isMobile = useResponsive();
 
+  // 🔐 Verificar sesión
+  useEffect(() => {
+    const rol = localStorage.getItem("rol");
+
+    if (!rol) {
+      window.location.href = "/login";
+    }
+  }, []);
+
   const cerrarSesion = () => {
     if (confirm("¿Seguro que deseas cerrar sesión?")) {
-      window.location.href = '/login';
+      localStorage.removeItem("rol"); // 🔥 eliminar sesión
+      window.location.href = "/login";
     }
   };
 
@@ -28,7 +42,7 @@ export default function DashboardPage() {
 
           {/* Contenido principal */}
           <main className={`main ${isMobile ? "mobile-main" : ""}`}>
-            {/* Barra superior */}
+            
             <header className="topbar">
               <div className="topbar-left"></div>
               <div className="titulo">
@@ -41,8 +55,8 @@ export default function DashboardPage() {
             <hr className="divider" />
             <p className="status">🟢 Conexión establecida - Sensores activos</p>
 
-            {/* Panel superior */}
             <section className={`panel-superior ${isMobile ? "mobile-panel" : ""}`}>
+              
               <div className="camara">
                 <h2>📷 Cámara de Monitoreo</h2>
                 <img src="/assets/camara.png" alt="Cámara" />
@@ -51,7 +65,7 @@ export default function DashboardPage() {
               <div className="inventario">
                 <h2>Inventario de Plantas</h2>
                 <div className="plantas">
-                  {/* Planta 1 */}
+
                   <div className="planta">
                     <img src="/assets/pitahaya.png" alt="Pitahaya" />
                     <h4>Pitahaya</h4>
@@ -59,7 +73,7 @@ export default function DashboardPage() {
                     <div className="barra"><div style={{ width: '78%' }}></div></div>
                     <span className="estado alerta">⚠ Atención</span>
                   </div>
-                  {/* Planta 2 */}
+
                   <div className="planta">
                     <img src="/assets/pimenton.png" alt="Pimentón" />
                     <h4>Pimentón</h4>
@@ -67,7 +81,7 @@ export default function DashboardPage() {
                     <div className="barra"><div style={{ width: '85%' }}></div></div>
                     <span className="estado ok">✔ Saludable</span>
                   </div>
-                  {/* Planta 3 */}
+
                   <div className="planta">
                     <img src="/assets/echeveria.png" alt="Echeveria" />
                     <h4>Echeveria</h4>
@@ -75,14 +89,14 @@ export default function DashboardPage() {
                     <div className="barra"><div style={{ width: '68%' }}></div></div>
                     <span className="estado ok">✔ Saludable</span>
                   </div>
+
                 </div>
               </div>
+
             </section>
 
-            {/* Precaución y Cards podrían también recibir clases móviles */}
           </main>
 
-          {/* Control Parental: opcional en mobile */}
           {!isMobile && (
             <div className="control">
               <h2>🧭 Control Parental</h2>

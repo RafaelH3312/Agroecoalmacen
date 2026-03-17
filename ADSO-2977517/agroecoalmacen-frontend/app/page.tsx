@@ -3,6 +3,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 
+
 interface Organismo {
   id: number;
   nombre_comun: string;

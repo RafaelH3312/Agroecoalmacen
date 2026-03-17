@@ -9,58 +9,85 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class UsuarioDAO {
 
-    public Usuario login(String usuario, String password) {
+    public UsuarioDAO() {
+        // Inicializa admin si no existe
+        crearAdminSiNoExiste();
+    }
 
-        Usuario u = null;
-        String sql = "SELECT * FROM cuentas WHERE nombre_usuario = ?";
+    // LOGIN con BCrypt
+public Usuario login(String usuario, String password) {
 
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+    Usuario u = null;
+    String sql = "SELECT * FROM usuarios WHERE usuario = ?";
 
-            ps.setString(1, usuario);
-            ResultSet rs = ps.executeQuery();
+    try (Connection con = Conexion.getConexion();
+         PreparedStatement ps = con.prepareStatement(sql)) {
 
-            if (rs.next()) {
-                boolean activo = rs.getString("estado").equalsIgnoreCase("activo");
-                if (!activo) {
-                    return null; // Usuario inactivo
-                }
+        ps.setString(1, usuario);
+        ResultSet rs = ps.executeQuery();
 
-                String hashBD = rs.getString("contrasena");
-                if (BCrypt.checkpw(password, hashBD)) {
-                    u = new Usuario();
-                    u.setIdUsuario(rs.getInt("id"));
-                    u.setUsuario(rs.getString("nombre_usuario"));
-                    u.setPassword(hashBD); // opcional: puedes setear null por seguridad
-                    u.setRol(rs.getString("rol"));
-                    u.setEstado(activo);
-                }
+        if (rs.next()) {
+
+            boolean activo = rs.getBoolean("estado"); // ✅ ahora es boolean
+            if (!activo) return null;
+
+            String hashBD = rs.getString("password"); // ✅ nombre correcto
+
+            if (BCrypt.checkpw(password, hashBD)) {
+                u = new Usuario();
+                u.setIdUsuario(rs.getInt("id_usuario")); // ✅ nombre correcto
+                u.setUsuario(rs.getString("usuario"));   // ✅ nombre correcto
+                u.setPassword(null);
+                u.setRol(rs.getString("rol"));
+                u.setEstado(activo);
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
-        return u;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
 
-    // Método para crear usuario con contraseña hasheada
+    return u;
+}
+
+    // Crear usuario normal
     public boolean crearUsuario(String usuario, String password, String rol) {
-        String sql = "INSERT INTO cuentas(nombre_usuario, contrasena, rol, estado) VALUES (?, ?, ?, 'activo')";
-        try (Connection con = Conexion.getConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+    String sql = "INSERT INTO usuarios(usuario, password, rol, estado) VALUES (?, ?, ?, 1)";
 
-            String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-            ps.setString(1, usuario);
-            ps.setString(2, hash);
-            ps.setString(3, rol);
+    try (Connection con = Conexion.getConexion();
+         PreparedStatement ps = con.prepareStatement(sql)) {
 
-            return ps.executeUpdate() > 0;
+        String hash = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        ps.setString(1, usuario);
+        ps.setString(2, hash);
+        ps.setString(3, rol);
+
+        return ps.executeUpdate() > 0;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
+
+    // Crear usuario admin si no existe
+private void crearAdminSiNoExiste() {
+    String sql = "SELECT * FROM usuarios WHERE usuario = 'admin'";
+
+    try (Connection con = Conexion.getConexion();
+         PreparedStatement ps = con.prepareStatement(sql)) {
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.next()) {
+            crearUsuario("admin", "admin123", "admin");
+            System.out.println("✅ Usuario admin creado");
         }
 
-        return false;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 }

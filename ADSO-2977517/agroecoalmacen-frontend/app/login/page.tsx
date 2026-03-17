@@ -15,16 +15,20 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:8080/agroecoalmacen-backend/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ usuario, clave }),
-      });
-
+const res = await fetch("http://localhost:8080/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  body: new URLSearchParams({ usuario, password: clave }),
+  credentials: "include",
+});
       const data = await res.json();
 
       if (data.ok) {
-        router.push("/"); // Redirigir al dashboard
+        // Guardar rol en localStorage
+        localStorage.setItem("rol", data.rol);
+
+        // Redirigir al inventario
+        router.push("/inventario");
       } else {
         setError(data.mensaje || "Usuario o contraseña incorrectos");
       }
@@ -37,16 +41,13 @@ export default function LoginPage() {
   return (
     <div className="login-fondo">
       <div className="login-box animate-slide-in">
-        {/* HEADER CENTRADO Y ANIMADO */}
         <div className="login-header">
           <img src="/assets/logo.png" alt="Logo Agroecoalmacen" className="login-logo" />
           <h1 className="login-title">Agroecoalmacen</h1>
           <p className="login-slogan">Monitoreo inteligente de tus plantas</p>
         </div>
 
-        {/* FORMULARIO */}
         <form className="login-form" onSubmit={handleSubmit}>
-          {/* Usuario */}
           <div className="campo">
             <label htmlFor="usuario">Usuario</label>
             <div className="usuario-wrapper">
@@ -70,12 +71,11 @@ export default function LoginPage() {
                 <div className="tooltip-arrow" />
                 <p><b>Necesitas esto para acceder:</b></p>
                 <p>Usuario: <b>admin</b></p>
-                <p>Contraseña: <b>weed</b></p>
+                <p>password: <b>admin123</b></p>
               </div>
             </div>
           </div>
 
-          {/* Contraseña */}
           <div className="campo">
             <label htmlFor="clave">Contraseña</label>
             <input
