@@ -16,8 +16,8 @@ export default function LoginPage() {
 
     try {
 const res = await fetch("http://localhost:8080/login", {
-  method: "POST",
-  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
   body: new URLSearchParams({ usuario, password: clave }),
   credentials: "include",
 });
