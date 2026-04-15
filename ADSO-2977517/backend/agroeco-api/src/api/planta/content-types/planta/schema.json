@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plantas",
+  "info": {
+    "singularName": "planta",
+    "pluralName": "plantas",
+    "displayName": "planta"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string"
+    },
+    "tipo": {
+      "type": "string"
+    },
+    "fecha_ingreso": {
+      "type": "date"
+    },
+    "estado": {
+      "type": "enumeration",
+      "enum": [
+        "Germinado",
+        "Plantula",
+        "Planta",
+        "Vegetativo",
+        "Floracion",
+        "Revegetacion"
+      ]
+    },
+    "ubicacion": {
+      "type": "string"
+    },
+    "temp": {
+      "type": "integer"
+    },
+    "luz": {
+      "type": "integer"
+    },
+    "img": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

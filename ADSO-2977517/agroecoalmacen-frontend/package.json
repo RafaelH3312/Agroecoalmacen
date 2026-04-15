@@ -11,6 +11,7 @@
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.1.0",
     "@prisma/client": "^7.1.0",
+    "clean": "^4.0.2",
     "mysql2": "^3.15.3",
     "next": "^14.2.33",
     "prisma": "^7.1.0",
