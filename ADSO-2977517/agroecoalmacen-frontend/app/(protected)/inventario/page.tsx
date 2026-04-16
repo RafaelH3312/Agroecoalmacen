@@ -309,28 +309,29 @@ const estados = ["Germinado", "Plantula", "Planta","Vegetativo", "Floracion", "R
         <div style={{ display: "flex", gap: 20 }}>
           {/* VISOR */}
           <div
-            style={{
-              flex: 1,
-              height: 382,
-              background: "#111",
-              borderRadius: 12,
-              overflow: "hidden",
-              position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              opacity: animando ? 0.4 : 1,
-              transform: animando ? "scale(.95)" : "scale(1)",
-              transition: "0.9s",
-            }}
-          >
-            {loading ? "⏳ Espere..." : "📷Live"}
-            <img
-  src={(previewImagen || (preview || organismoSeleccionado)?.img || "/assets/default.png") + "?t=" + Date.now()}
-              alt={(preview || organismoSeleccionado)?.nombre || "Preview"}
-              style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 12 }}
-            />
-          </div>
+  style={{
+    width: "50%",
+    maxWidth: 600,
+    height: 300,
+    margin: "0 auto", 
+    background: "#111",
+    borderRadius: 12,
+    overflow: "hidden",
+    position: "relative",
+    flexShrink: 0, // 
+  }}
+>
+  <img
+    src={previewImagen || (preview || organismoSeleccionado)?.img || "/assets/default.png"}
+    alt="preview"
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover", 
+      display: "block",
+    }}
+  />
+</div>
 
           {/* FORMULARIO */}
           {mostrarFormulario && (
@@ -452,30 +453,55 @@ const estados = ["Germinado", "Plantula", "Planta","Vegetativo", "Floracion", "R
         </div>
 
         {/* MINI-FICHAS */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, 200px)", gap: 15, marginTop: 25 }}>
+       <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+    gap: 20,
+    marginTop: 30,
+  }}
+>
           {organismos.map(o => (
-            <div
-              key={o.id}
-              onClick={() => seleccionarOrganismo(o)}
-              onMouseEnter={() => setPreview(o)}
-              onMouseLeave={() => setPreview(null)}
-              style={{
-                cursor: "pointer",
-                borderRadius: 12,
-                overflow: "hidden",
-                background: "hsla(275,17%,14%,0.57)",
-                padding: 5,
-                textAlign: "center",
-                color: "#fff",
-              }}
-            >
-              <img
-                src={o.img}
-                alt={o.nombre}
-                style={{ width: "100%", height: 140, objectFit: "cover", borderRadius: 8, transition: "transform 0.3s" }}
-              />
-              <h4 style={{ textAlign: "center", color: "#2c948b" }}>{o.nombre}</h4>
-            </div>
+<div
+  key={o.id}
+  onClick={() => seleccionarOrganismo(o)}
+onMouseEnter={(e) => {
+  e.currentTarget.style.transform = "scale(1.02)";
+}}
+  onMouseLeave={() => setPreview(null)}
+  style={{
+    cursor: "pointer",
+    borderRadius: 12,
+    overflow: "hidden",
+    background: "#1f1f1f",
+    color: "#fff",
+    boxShadow: "0 4px 10px rgba(0,0,0,0.4)",
+    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+  }}
+  onMouseOver={(e) => {
+    e.currentTarget.style.transform = "scale(1.05)";
+  }}
+  onMouseOut={(e) => {
+    e.currentTarget.style.transform = "scale(1)";
+  }}
+>
+  <img
+    src={o.img}
+    alt={o.nombre}
+    style={{
+      width: "100%",
+      height: 140,
+      objectFit: "cover",
+    }}
+  />
+
+  <div style={{ padding: 10 }}>
+    <h4 style={{ margin: 0, color: "#2c948b" }}>{o.nombre}</h4>
+    <p style={{ margin: 0, fontSize: 12, opacity: 0.7 }}>
+      {o.tipo}
+    </p>
+  </div>
+</div>
           ))}
         </div>
       </main>
