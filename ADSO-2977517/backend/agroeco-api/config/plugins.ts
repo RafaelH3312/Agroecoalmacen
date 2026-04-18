@@ -7,7 +7,7 @@ export default ({ env }) => ({
   },
   'users-permissions': {
     config: {
-      providers: {}, // <-- vacío, Strapi no rompe
+      providers: {},
     },
   },
 });

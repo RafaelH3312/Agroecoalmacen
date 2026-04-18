@@ -3,7 +3,7 @@ module.exports = [
   {
     name: "strapi::cors",
     config: {
-      origin: ["http://localhost:3000"], // tu frontend
+      origin: ["http://localhost:3000"], 
       headers: [
         "Content-Type",
         "Authorization",
