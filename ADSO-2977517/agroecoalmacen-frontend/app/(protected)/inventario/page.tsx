@@ -308,29 +308,33 @@ const estados = ["Germinado", "Plantula", "Planta","Vegetativo", "Floracion", "R
 
         <div style={{ display: "flex", gap: 20 }}>
           {/* VISOR */}
-          <div
+ <div
   style={{
-    width: "50%",
+    width: "40%",
     maxWidth: 600,
     height: 300,
-    margin: "0 auto", 
-    background: "#111",
+    margin: "0 auto",
+    background: "transparent", 
     borderRadius: 12,
+    padding:8, // 
+    boxSizing: "border-box",
     overflow: "hidden",
     position: "relative",
-    flexShrink: 0, // 
+    flexShrink: 0,
+    border: "2px solid #26677a", //  marco 
   }}
 >
-  <img
-    src={previewImagen || (preview || organismoSeleccionado)?.img || "/assets/default.png"}
-    alt="preview"
-    style={{
-      width: "100%",
-      height: "100%",
-      objectFit: "cover", 
-      display: "block",
-    }}
-  />
+<img
+  src={previewImagen || (preview || organismoSeleccionado)?.img || "/assets/logo.png"}
+  alt="preview"
+  style={{
+    width: "100%",
+    height: "100%",
+    objectFit: "contain",
+    display: "block",
+    borderRadius: 8, 
+  }}
+/>
 </div>
 
           {/* FORMULARIO */}
@@ -441,7 +445,7 @@ const estados = ["Germinado", "Plantula", "Planta","Vegetativo", "Floracion", "R
             style={{
               position: "absolute",
               left: 0,
-              background: "#27ae60",
+              background:"#26677a",
               color: "#fff",
               padding: "10px 18px",
               borderRadius: 30,
@@ -473,7 +477,7 @@ onMouseEnter={(e) => {
     cursor: "pointer",
     borderRadius: 12,
     overflow: "hidden",
-    background: "#1f1f1f",
+    background: "#26677a",
     color: "#fff",
     boxShadow: "0 4px 10px rgba(0,0,0,0.4)",
     transition: "transform 0.2s ease, box-shadow 0.2s ease",

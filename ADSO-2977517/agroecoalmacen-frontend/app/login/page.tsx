@@ -36,7 +36,6 @@ const loginInvitado = async () => {
 
 sessionStorage.setItem("token", data.jwt);
 
-// 🔥 FIX
 sessionStorage.setItem("rol", "Invitado");
 
 router.replace("/inventario");
@@ -130,7 +129,7 @@ router.replace("/login");
       <div className="login-box animate-slide-in">
         <div className="login-header">
           <img src="/assets/logo.png" alt="Logo Agroecoalmacen" className="login-logo" />
-          <h1 className="login-title">Agroecoalmacen</h1>
+          <h1 className="login-title">Agroecoalmacen</h1 >
           <p className="login-slogan">Monitoreo inteligente de tus plantas</p>
         </div>
         
@@ -224,12 +223,12 @@ router.replace("/login");
     <style jsx>{`
   .modal-overlay {
     position: fixed;
-    inset: 0; /* 🔥 mejor que top/left/width/height */
+    inset: 0; /*  mejor que top/left/width/height */
     background: rgba(0,0,0,0.6);
 
     display: flex;
-    justify-content: center;  /* 🔥 centra horizontal */
-    align-items: center;      /* 🔥 centra vertical */
+    justify-content: center;  /*  centra horizontal */
+    align-items: center;      /*  centra vertical */
 
     z-index: 9999;
   }
